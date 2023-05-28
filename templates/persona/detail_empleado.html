@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+{{ object.full_name }}
+{% endblock title %}
+
+
+{% block content %}
+
+{% include 'includes/header.html' %}
+
+<div class="grid-container">
+    <div class="grid-x grid-margin-x align-center">
+        <div class="cell large-4 card" style="width: 300px; margin-top: 10px;">
+            <div class="card-divider">
+                {{ empleado.get_job_display }} <!--get_job_display -> recupera del atributo job el valor asignado del diccionario 'CONTADOR', no el valor real '0' (tiene que ser el atributo tipo choice)-->
+            </div>
+            {% if empleado.avatar %}
+            <img src="{{ empleado.avatar.url }}">
+            {% else %}
+            <img src="{% static 'img/40.jpg' %}">
+            {% endif %}
+
+            <div class="card-section">
+                <h4>{{ empleado.full_name }}</h4>
+                <p>{{ empleado.last_name }}</p>
+                <p>{{ empleado.departamento.short_name }}</p> <!-- Si solo ponemos empleado.departamento aparece la clase meta del modelo Departamento-->
+                <p><span class="label">Habilidades</span></p>
+                <ul class="vertical menu">
+                    {% for h in empleado.habilidades.all %} <!-- Iterar atributo tipo ManytoMany -->
+                        <li>{{ h.habilidad }}</li>  <!-- Si solo ponemos h, aparece la clase meta del modelo Habilidad -->
+                    {% endfor %} 
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+
+
+<h1>Detalle de un empleado {{ titulo }}</h1>
+
+<!--Se puede acceder al objeto de estas dos formas: -->
+<!-- {{ object }} -->
+{{ empleado }} <!--el nombre del modelo en minuscula!!-->
+
+<h3>Totos los datos:</h3>
+<p>{{ empleado.first_name }}</p>
+<p>{{ empleado.last_name }}</p>
+<p>{{ empleado.departamento }}</p>
+<p>{{ empleado.habilidades }}</p>
